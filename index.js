@@ -3,14 +3,15 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const express = require("express");
 const bodyParser = require("body-parser");
-const authRoutes = require("./Routes/auth");    
+const authRoutes = require("./Routes/auth");
 
 const app = express();
-const PORT = 6969;
+const PORT = 4000;
 
 dotenv.config();
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.json());
 
 try {
   mongoose.connect(process.env.MONGO_URL);
