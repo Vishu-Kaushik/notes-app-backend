@@ -10,7 +10,7 @@ const app = express();
 const PORT = 4000;
 
 dotenv.config();
-app.use(cors());
+app.use(cors({ origin: "*" }));
 app.use(bodyParser.json());
 app.use(express.json());
 
@@ -28,6 +28,7 @@ app.get("/", (req, res) => {
 
 app.use("/auth", authRoutes);
 app.use("/notes", notesRoutes);
+app.use("/files", express.static("files"));
 
 app.listen(PORT, () => {
   console.log(`Server is ruuning on port ${PORT}`);

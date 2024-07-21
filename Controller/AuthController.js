@@ -4,6 +4,7 @@ const User = require("../Models/user");
 const bcrypt = require("bcrypt");
 const multer = require("multer");
 const cloudinary = require("cloudinary");
+const fs = require("fs");
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ const signup = async (req, res) => {
       res.status(401).send("User Already Exists with this Email");
     }
 
+    // console.log(req.file);
     // Check if file is provided
     if (!req.file) {
       return res.status(400).json({ error: "No Profile Image Provided" });
@@ -54,7 +56,7 @@ const signup = async (req, res) => {
     });
 
     await newUser.save();
-
+    // fs.unlinkSync(req.file.path);
     return res.status(200).json({
       status: "OK",
       user: newUser,
@@ -68,20 +70,22 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { userEmail, userPassword } = req.body;
+    // console.log(userEmail);
 
-    const alreadyUser = await User.findOne({ userEmail });
-    if (alreadyUser) {
+    const user = await User.findOne({ userEmail });
+
+    if (user) {
       const passwordMatch = await bcrypt.compare(
         userPassword,
-        alreadyUser.userPassword
+        user.userPassword
       );
       if (passwordMatch) {
-        return res.json(alreadyUser);
+        return res.json(user);
       } else {
-        return res.json({ status: "Error", getuser: false });
+        return res.json({ status: "Error", getUser: false });
       }
     } else {
-      return res.json({ status: "Error", getuser: false });
+      return res.json({ status: "Error", getUser: false });
     }
   } catch (error) {
     res.status(400).json({ error: error.message });

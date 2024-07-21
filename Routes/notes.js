@@ -1,11 +1,11 @@
 const express = require("express");
-const router = express.Router;
+const router = express.Router();
 const NotesController = require("../Controller/NotesController");
 const multer = require("multer");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const destinationPath = "../files";
+    const destinationPath = "./files";
     cb(null, destinationPath);
   },
   filename: function (req, file, cb) {
@@ -14,13 +14,13 @@ const storage = multer.diskStorage({
   },
 });
 
-var upload = multer({
+const upload = multer({
   storage: storage,
 });
 
 // Routes
 router.post("/upload", upload.single("file"), NotesController.uploadNote);
-// router.get("/getFiles", NotesController.getNote);
-// router.get("/getFiles/:id", NotesController.getNoteByID);
+router.get("/getFiles", NotesController.getNote);
+router.get("/getFiles/:id", NotesController.getNotesById);
 
 module.exports = router;

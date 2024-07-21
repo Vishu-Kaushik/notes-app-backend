@@ -7,20 +7,23 @@ const path = require("path");
 dotenv.config();
 
 const storage = multer.memoryStorage();
-var upload = multer({ storage: storage });
+var upload = multer({ storage: storage }).single("file");
+
+const app = express();
+app.use(express.json());
 
 const uploadNote = async (req, res) => {
   try {
-    const fileName = req.body.file;
+    const fileName = req.body.title;
     const fileDescription = req.body.description;
     const tags = req.body.tags;
-    const file = req.file.fileName;
-
+    const file = req.file.filename;
+    console.log(file);
     const uploadedBy = req.body.userId;
     console.log(uploadedBy);
 
     const newFile = new Notes({
-      fileName: fileNamee,
+      fileName: fileName,
       fileDescription: fileDescription,
       tags: tags,
       files: file,

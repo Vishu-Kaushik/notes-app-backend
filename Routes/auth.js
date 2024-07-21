@@ -4,6 +4,10 @@ const authController = require("../Controller/AuthController");
 const multer = require("multer");
 const dotenv = require("dotenv");
 const cloudinary = require("cloudinary");
+const cors = require("cors");
+const app = express();
+
+app.use(cors({ origin: "*" }));
 
 dotenv.config();
 
@@ -15,7 +19,8 @@ cloudinary.config({
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const destinationPath = "../images";
+    const destinationPath = "./images";
+
     cb(null, destinationPath);
   },
   filename: function (req, file, cb) {
